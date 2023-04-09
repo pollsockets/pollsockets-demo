@@ -100,7 +100,7 @@ const simulate = useForm({})
                     <p>You can force data change by clicking the button below to simulate an automated process on the server.</p>
                 </div>
                 <div class="mt-6 flex justify-center">
-                    <button @click="simulate.post('/simulate')" type="button" :disabled="simulate.processing" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-75" :class="{'cursor-not-allowed': simulate.processing}">Simulate data change</button>
+                    <button @click="simulate.post('/simulate')" type="button" :disabled="simulate.processing" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:grayscale" :class="{'cursor-not-allowed': simulate.processing}">Simulate data change</button>
                 </div>
             </Panel>
 
