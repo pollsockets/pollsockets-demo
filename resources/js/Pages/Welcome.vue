@@ -92,7 +92,7 @@ const simulate = useForm({})
                     <path d="M42.46 61.39v-16a2.27 2.27 0 0 1 1-1.61c4.28-2.58 8.61-5.06 13.6-8v16a2.29 2.29 0 0 1-.95 1.63C51.8 56 47.46 58.5 42.46 61.39z" class="fill-indigo-600"></path>
                     <text x="85" y="50" font-size="50" class="fill-white">pollsockets</text>
                 </svg>
-                <div class="mt-6 prose dark:prose-invert max-w-none xl:max-w-2xl">
+                <div class="mt-6 prose prose-invert max-w-none xl:max-w-2xl">
                     <h1>Polling vs Pollsockets</h1>
                     <p>A simple example showing differences between polling and pollsockets. In both examples data comes from <code>/people</code> endpoint that takes 3 seconds to compute and return 10 rows of data.</p>
                     <p>With current set up (worst case scenario) polling loses heavily, because it keeps hitting an expensive endpoint thus increasing load on the server.</p>
