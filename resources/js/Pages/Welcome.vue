@@ -1,10 +1,11 @@
 <script setup>
 import {Head, router, useForm} from '@inertiajs/vue3';
 import Table from "@/Components/Table.vue"
-import {reactive} from "vue"
+import {reactive, ref} from "vue"
 import {useSocket} from "@/Composables/pollsockets.js"
 import Info from "@/Pages/Info.vue"
 import Panel from "@/Components/Panel.vue"
+import {Switch, SwitchGroup, SwitchLabel} from "@headlessui/vue"
 
 let props = defineProps({
     'people': Array,
@@ -16,13 +17,15 @@ const pollTimings = reactive({start: 0, end: 0})
 const pollSocketState = reactive({people: props.people, count: 0, size: 0, time: 0, inProgress: 0})
 const pollSocketTimings = reactive({poll: {start: 0, end: 0}, fetch: {start: 0, end: 0}})
 
+const optimized = ref(false)
+
 function refresh() {
     setTimeout(() => {
         pollState.count++;
         pollTimings.start = Date.now()
         pollState.inProgress = true
 
-        fetch('/people')
+        fetch('/people' + (optimized.value ? '?noSleep=1' : ''))
             .then((response) => response.json())
             .then((data) => {
                 pollTimings.end = Date.now()
@@ -42,7 +45,7 @@ function refreshPollsocket() {
     pollSocketState.count++
     pollSocketState.inProgress++
 
-    fetch('/people')
+    fetch('/people' + (optimized.value ? '?noSleep=1' : ''))
         .then((response) => response.json())
         .then((data) => {
             pollSocketState.inProgress--
@@ -97,6 +100,14 @@ const simulate = useForm({})
                     <p>A simple example showing differences between polling and pollsockets. In both examples data comes from <code>/people</code> endpoint that takes 3 seconds to compute and return 10 rows of data.</p>
                     <p>With current set up (worst case scenario) polling loses heavily, because it keeps hitting an expensive endpoint thus increasing load on the server.</p>
                     <p>Even if the endpoint is optimized (e.g. cache) polling still performs worse because of the amount of data that is transmitted even though it mostly never changes.</p>
+                    <SwitchGroup as="div" class="flex justify-center">
+                        <Switch v-model="optimized" :class="[optimized ? 'bg-indigo-600' : 'bg-gray-200', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2']">
+                            <span aria-hidden="true" :class="[optimized ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
+                        </Switch>
+                        <SwitchLabel as="span" class="ml-3 text-sm">
+                            <span class="font-medium text-white">Use optimized endpoint</span>
+                        </SwitchLabel>
+                    </SwitchGroup>
                     <p>You can force data change by clicking the button below to simulate an automated process on the server.</p>
                 </div>
                 <div class="mt-6 flex justify-center">

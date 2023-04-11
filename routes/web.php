@@ -4,6 +4,7 @@ use App\Actions\UpdateFakerSeedAction;
 use Database\Factories\PersonFactory;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,11 +23,13 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/people', function () {
+Route::get('/people', function (Request $request) {
     $people = PersonFactory::times(10)->make();
     $size = mb_strlen($people->toJson(), '8bit');
 
-    sleep(3);
+    if (!$request->has('noSleep')) {
+        sleep(3);
+    }
 
     return [
         'people' => $people,
